@@ -1,0 +1,64 @@
+#include <stdio.h>
+
+#define uint8 uint8_t
+
+struct Pixel
+{
+  // rgba in little endian will be written out as agbr
+  uint8 alpha;
+  uint8 green;
+  uint8 blue;
+  uint8 red;
+};
+
+// function declaration
+void printPixel(struct Pixel *pixel);
+void printFile();
+void readFile();
+
+int main(void)
+{
+  printf("Hello world!");
+  struct Pixel pixel1;
+  pixel1.alpha = 255;
+  pixel1.green = 255;
+  pixel1.blue = 255;
+  pixel1.red = 255;
+  printPixel(&pixel1);
+  printFile();
+  readFile();
+  printf("\ndone!");
+  return 0;
+}
+
+void printPixel(struct Pixel *pixel)
+{
+  printf("red: %d;  green: %d;  blue: %d;  alpha: %d;", pixel->red, pixel->green, pixel->blue, pixel->alpha);
+}
+
+void printFile()
+{
+  FILE *file;
+
+  file = fopen("test.txt", "w+");
+  fprintf(file, "This is for testing fprintf...\n");
+  fputs("This is for testing fputs...\n", file);
+  fclose(file);
+}
+
+void readFile()
+{
+  FILE *file;
+  char buff[255];
+
+  file = fopen("test.txt", "r");
+  fscanf(file, "%s", buff);
+  printf("1: %s\n", buff);
+
+  fgets(buff, 255, (FILE*)file);
+  printf("2: %s\n", buff);
+
+  fgets(buff, 255, (FILE*)file);
+  printf("3: %s\n", buff);
+  fclose(file);
+}
