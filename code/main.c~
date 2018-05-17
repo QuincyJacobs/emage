@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <stdint.h>
-#include <iomanip>
-#include <iostream>
 
 #define uint8 uint8_t
 
@@ -19,20 +17,20 @@ char bluePixel[] = "0000ffff";
 
 // conclusion: Use hexadecimal for color storage as it's more compact than binary.
 
-struct Pixel
+typedef struct Pixel
 {
     uint8 alpha;
     uint8 green;
     uint8 blue;
     uint8 red;
-};
+}Pixel;
 
 // function declaration
 Pixel getPixel(char s[8]);
 uint8 hex2Dec(char right, char left);
 uint8 calcDec(char singleHexChar);
-void printPixel(struct Pixel *pixel);
-void hexifyPixel(struct Pixel *pixel);
+void printPixel(Pixel *pixel);
+void hexifyPixel(Pixel *pixel);
 void uint8ToHex(uint8 Byte, char *hex, int arrayIndex);
 char getSingleHexChar(uint8 bits4);
 void printFile();
@@ -40,7 +38,7 @@ void readFile();
 
 int main(void)
 {
-    struct Pixel pixel1;
+    Pixel pixel1;
 
     Pixel pixelArray[4];
 
@@ -48,6 +46,11 @@ int main(void)
     pixelArray[1] = getPixel((char*)"00ff00ff");
     pixelArray[2] = getPixel((char*)"0000ffff");
     pixelArray[3] = getPixel((char*)"ffffffff");
+
+    printPixel(&pixelArray[0]);
+    printPixel(&pixelArray[1]);
+    printPixel(&pixelArray[2]);
+    printPixel(&pixelArray[3]);
   
     pixel1.red = 0;
     pixel1.green = 2;
@@ -66,15 +69,18 @@ int main(void)
 
 Pixel getPixel(char s[8])
 {
-    return Pixel{ hex2Dec(s[1], s[0]), hex2Dec(s[3], s[2]), hex2Dec(s[5], s[4]), hex2Dec(s[7], s[6]) };
+    Pixel pixel = { hex2Dec(s[1], s[0]), hex2Dec(s[3], s[2]), hex2Dec(s[5], s[4]), hex2Dec(s[7], s[6]) };
+    return pixel; 
 }
 
-uint8 hexToDec(char* string, int size)
+// TODO: This function
+uint8 hexToDec(char* chars, int size)
 {
     for(int i = 0; i < size; i++)
     {
-	    
+	
     }
+    return 0;
 }
 
 uint8 hex2Dec(char right, char left)
@@ -140,14 +146,14 @@ uint8 calcDec(char singleHexChar)
     return dec;
 }
 
-void printPixel(struct Pixel *pixel)
+void printPixel(Pixel *pixel)
 {
-    printf("red: %d;  green: %d;  blue: %d;  alpha: %d;\n", pixel->red, pixel->green, pixel->blue, pixel->alpha);
+    printf("red: %d   \t;  green: %d \t;  blue: %d \t;  alpha: %d \t;\n", pixel->red, pixel->green, pixel->blue, pixel->alpha);
 }
 
-void hexifyPixel(struct Pixel *pixel)
+void hexifyPixel(Pixel *pixel)
 {
-    char hex[9];
+    char hex[4];
     uint8ToHex(pixel->red, hex, 0);
     uint8ToHex(pixel->green, hex, 2);
     uint8ToHex(pixel->blue, hex, 4);
@@ -161,10 +167,10 @@ void uint8ToHex(uint8 Byte, char *hex, int arrayIndex)
 {
     uint8 higherHex = 0;
     while(Byte >= 16)
-	{
-	    Byte -= 16;
-	    higherHex++;
-	}
+    {
+	Byte -= 16;
+	higherHex++;
+    }
   
     hex[arrayIndex] = getSingleHexChar(higherHex);
     hex[arrayIndex+1] = getSingleHexChar(Byte);
