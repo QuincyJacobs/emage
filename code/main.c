@@ -21,10 +21,10 @@ char bluePixel[] = "0000ffff";
 
 typedef struct Pixel
 {
-    uint8 alpha;
+    uint8 red;
     uint8 green;
     uint8 blue;
-    uint8 red;
+    uint8 alpha;
 }Pixel;
 
 // function declaration

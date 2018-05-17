@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <math.h>
 
 #define uint8 uint8_t
 
@@ -16,6 +17,7 @@ char greenPixel[] = "00ff00ff";
 char bluePixel[] = "0000ffff";
 
 // conclusion: Use hexadecimal for color storage as it's more compact than binary.
+// leave stride as decimal.
 
 typedef struct Pixel
 {
@@ -27,8 +29,7 @@ typedef struct Pixel
 
 // function declaration
 Pixel getPixel(char s[8]);
-uint8 hex2Dec(char right, char left);
-uint8 calcDec(char singleHexChar);
+uint8 hexToDec(char* chars, int size);
 void printPixel(Pixel *pixel);
 void hexifyPixel(Pixel *pixel);
 void uint8ToHex(uint8 Byte, char *hex, int arrayIndex);
@@ -42,10 +43,10 @@ int main(void)
 
     Pixel pixelArray[4];
 
-    pixelArray[0] = getPixel((char*)"ff0000ff");
-    pixelArray[1] = getPixel((char*)"00ff00ff");
-    pixelArray[2] = getPixel((char*)"0000ffff");
-    pixelArray[3] = getPixel((char*)"ffffffff");
+    pixelArray[0] = getPixel("ff0000ff");
+    pixelArray[1] = getPixel("00ff00ff");
+    pixelArray[2] = getPixel("0000ffff");
+    pixelArray[3] = getPixel("ffffffff");
 
     printPixel(&pixelArray[0]);
     printPixel(&pixelArray[1]);
@@ -69,81 +70,75 @@ int main(void)
 
 Pixel getPixel(char s[8])
 {
-    Pixel pixel = { hex2Dec(s[1], s[0]), hex2Dec(s[3], s[2]), hex2Dec(s[5], s[4]), hex2Dec(s[7], s[6]) };
+    Pixel pixel = { hexToDec(s, 2), hexToDec(&s[2], 2), hexToDec(&s[4], 2), hexToDec(&s[6], 2)};
     return pixel; 
 }
 
-// TODO: This function
+// hexToDec returns uint8 because we will only use it for colors, which are also uint8
 uint8 hexToDec(char* chars, int size)
 {
+    uint8 resultingDecimal = 0;
+    uint8 res = 0;
     for(int i = 0; i < size; i++)
     {
-	
+	uint8 addedValue = pow(16, (size - i - 1));
+	uint8 currentValue = 0;
+	switch (chars[i]) {
+	case '0':
+	    currentValue = 0;
+	    break;
+	case '1':
+	    currentValue = 1;
+	    break;
+	case '2':
+	    currentValue = 2;
+	    break;
+	case '3':
+	    currentValue = 3;
+	    break;
+	case '4':
+	    currentValue = 4;
+	    break;
+	case '5':
+	    currentValue = 5;
+	    break;
+	case '6':
+	    currentValue = 6;
+	    break;
+	case '7':
+	    currentValue = 7;
+	    break;
+	case '8':
+	    currentValue = 8;
+	    break;
+	case '9':
+	    currentValue = 9;
+	    break;
+	case 'a':
+	    currentValue = 10;
+	    break;
+	case 'b':
+	    currentValue = 11;
+	    break;
+	case 'c':
+	    currentValue = 12;
+	    break;
+	case 'd':
+	    currentValue = 13;
+	    break;
+	case 'e':
+	    currentValue = 14;
+	    break;
+	case 'f':
+	    currentValue = 15;
+	    break;
+	default:
+	    currentValue = 0;
+	    break;
+	}
+	resultingDecimal += (currentValue * addedValue);
     }
-    return 0;
-}
-
-uint8 hex2Dec(char right, char left)
-{
-    uint8 highBits = calcDec(right) * 16;
-    uint8 lowBits = calcDec(left);
-    return highBits + lowBits;
-}
-
-uint8 calcDec(char singleHexChar)
-{
-    uint8 dec;
-    switch (singleHexChar) {
-    case '1':
-	dec = 1;
-	break;
-    case '2':
-	dec = 2;
-	break;
-    case '3':
-	dec = 3;
-	break;
-    case '4':
-	dec = 4;
-	break;
-    case '5':
-	dec = 5;
-	break;
-    case '6':
-	dec = 6;
-	break;
-    case '7':
-	dec = 7;
-	break;
-    case '8':
-	dec = 8;
-	break;
-    case '9':
-	dec = 9;
-	break;
-    case 'a':
-	dec = 10;
-	break;
-    case 'b':
-	dec = 11;
-	break;
-    case 'c':
-	dec = 12;
-	break;
-    case 'd':
-	dec = 13;
-	break;
-    case 'e':
-	dec = 14;
-	break;
-    case 'f':
-	dec = 15;
-	break;
-    default:
-	dec = 0;
-	break;
-    }
-    return dec;
+    return resultingDecimal;
 }
 
 void printPixel(Pixel *pixel)
