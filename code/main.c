@@ -30,10 +30,9 @@ typedef struct Pixel
 // function declaration
 Pixel getPixel(char s[8]);
 uint8 hexToDec(char* chars, int size);
+void getHexPixel(Pixel *pixel);
+void decToHex(uint8 dec, char hex[2]);
 void printPixel(Pixel *pixel);
-void hexifyPixel(Pixel *pixel);
-void uint8ToHex(uint8 Byte, char *hex, int arrayIndex);
-char getSingleHexChar(uint8 bits4);
 void printFile();
 void readFile();
 
@@ -59,11 +58,11 @@ int main(void)
     pixel1.alpha = 148;
   
     printPixel(&pixel1);
+
+    getHexPixel(&pixel1);
   
     //printFile();
     //readFile();
-
-    hexifyPixel(&pixel1);
   
     return 0;
 }
@@ -141,74 +140,96 @@ uint8 hexToDec(char* chars, int size)
     return resultingDecimal;
 }
 
+void getHexPixel(Pixel *pixel)
+{
+	char printPixel[9] = "00000000";
+	decToHex(pixel->red, &printPixel[0]);
+	decToHex(pixel->green, &printPixel[2]);
+	decToHex(pixel->blue, &printPixel[4]);
+	decToHex(pixel->alpha, &printPixel[6]);
+	printf("\n%s", printPixel);
+}
+
+void decToHex(uint8 dec, char hex[2]) 
+{
+	// colors are saved as 2 hexadecimal digits, so minimum of 2
+	int hexDigitAmount = 2;
+
+	// get the amount of digits the hex will be (always 2 in this code, but didn't feel like breaking a working function)
+	while (dec >= pow(16, hexDigitAmount))
+	{
+		hexDigitAmount++;
+	}
+
+	// calculate the hex digit (from high to low)
+	for (int i = 1; i <= hexDigitAmount; i++)
+	{
+		// value indicating the decimal value of the highest hexadecimal
+		int curHexDecimalValue = pow(16, ((hexDigitAmount - i)));
+		// decimal value indicating the hexadecimal value for a single position (0-15)
+		int curHexDigitValue = (dec / curHexDecimalValue);
+		// remove the hex value (decimal) being processed from the total (decimal)
+		dec -= (curHexDecimalValue*curHexDigitValue);
+
+		switch (curHexDigitValue) {
+		case 0:
+			hex[i - 1] = '0';
+			break;
+		case 1:
+			hex[i - 1] = '1';
+			break;
+		case 2:
+			hex[i - 1] = '2';
+			break;
+		case 3:
+			hex[i - 1] = '3';
+			break;
+		case 4:
+			hex[i - 1] = '4';
+			break;
+		case 5:
+			hex[i - 1] = '5';
+			break;
+		case 6:
+			hex[i - 1] = '6';
+			break;
+		case 7:
+			hex[i - 1] = '7';
+			break;
+		case 8:
+			hex[i - 1] = '8';
+			break;
+		case 9:
+			hex[i - 1] = '9';
+			break;
+		case 10:
+			hex[i - 1] = 'a';
+			break;
+		case 11:
+			hex[i - 1] = 'b';
+			break;
+		case 12:
+			hex[i - 1] = 'c';
+			break;
+		case 13:
+			hex[i - 1] = 'd';
+			break;
+		case 14:
+			hex[i - 1] = 'e';
+			break;
+		case 15:
+			hex[i - 1] = 'f';
+			break;
+		default:
+			hex[i - 1] = '0';
+			break;
+		}
+	}
+}
+
 void printPixel(Pixel *pixel)
 {
     printf("red: %d   \t;  green: %d \t;  blue: %d \t;  alpha: %d \t;\n", pixel->red, pixel->green, pixel->blue, pixel->alpha);
-}
-
-void hexifyPixel(Pixel *pixel)
-{
-    char hex[4];
-    uint8ToHex(pixel->red, hex, 0);
-    uint8ToHex(pixel->green, hex, 2);
-    uint8ToHex(pixel->blue, hex, 4);
-    uint8ToHex(pixel->alpha, hex, 6);
-
-    //TODO: remove print
-    printf("\n%s\n", hex);
-}
-
-void uint8ToHex(uint8 Byte, char *hex, int arrayIndex)
-{
-    uint8 higherHex = 0;
-    while(Byte >= 16)
-    {
-	Byte -= 16;
-	higherHex++;
-    }
-  
-    hex[arrayIndex] = getSingleHexChar(higherHex);
-    hex[arrayIndex+1] = getSingleHexChar(Byte);
-}
-
-char getSingleHexChar(uint8 bits4)
-{
-    switch(bits4){
-    case 0:
-	return '0';
-    case 1:
-	return '1';
-    case 2:
-	return '2';
-    case 3:
-	return '3';
-    case 4:
-	return '4';
-    case 5:
-	return '5';
-    case 6:
-	return '6';
-    case 7:
-	return '7';
-    case 8:
-	return '8';
-    case 9:
-	return '9';
-    case 10:
-	return 'a';
-    case 11:
-	return 'b';
-    case 12:
-	return 'c';
-    case 13:
-	return 'd';
-    case 14:
-	return 'e';
-    case 15:
-	return 'f';
-    default:
-	return 0;
-    }
 }
 
 void printFile()
