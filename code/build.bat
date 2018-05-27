@@ -1,1 +1,1 @@
-gcc main.c -o program
+gcc main.c pixel.c -o program
