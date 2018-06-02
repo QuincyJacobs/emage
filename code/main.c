@@ -1,20 +1,7 @@
 #include <stdio.h>
-#include <stdint.h>
-#include <math.h>
 
 #include "pixel.h"
-
-#pragma warning(disable:4996)
-
-// hexadecimal
-//char stride[] = "0000000000000005";
-//char redPixel[] = "ff0000ff";
-//char greenPixel[] = "00ff00ff";
-//char bluePixel[] = "0000ffff";
-
-// function declaration
-void printFile();
-void readFile();
+#include "file.h"
 
 int main(void)
 {
@@ -41,34 +28,11 @@ int main(void)
 
 	getHexPixel(&pixel1);
 
-	//printFile();
-	//readFile();
+	printFile("0000000000000005ff0000ff00ff00ff0000ffffffffffff");
+	printFileStatistics();
+
+	getchar();
 
 	return 0;
 }
 
-void printFile()
-{
-	FILE *file;
-
-	file = fopen("test.emg", "w+");
-	fputs("This is for testing fputs.\n", file);
-	fclose(file);
-}
-
-void readFile()
-{
-	FILE *file;
-	char buff[255];
-
-	file = fopen("test.emg", "r");
-	fscanf(file, "%s", buff);
-	printf("1: %s\n", buff);
-
-	fgets(buff, 255, (FILE*)file);
-	printf("2: %s\n", buff);
-
-	fgets(buff, 255, (FILE*)file);
-	printf("3: %s\n", buff);
-	fclose(file);
-}

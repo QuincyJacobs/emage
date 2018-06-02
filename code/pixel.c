@@ -16,63 +16,64 @@ uint8 hexToDec(char* chars, int size)
     uint8 resultingDecimal = 0;
     uint8 res = 0;
     for(int i = 0; i < size; i++)
-    {
-	uint8 addedValue = pow(16, (size - i - 1));
-	uint8 currentValue = 0;
-	switch (chars[i]) {
-	case '0':
-	    currentValue = 0;
-	    break;
-	case '1':
-	    currentValue = 1;
-	    break;
-	case '2':
-	    currentValue = 2;
-	    break;
-	case '3':
-	    currentValue = 3;
-	    break;
-	case '4':
-	    currentValue = 4;
-	    break;
-	case '5':
-	    currentValue = 5;
-	    break;
-	case '6':
-	    currentValue = 6;
-	    break;
-	case '7':
-	    currentValue = 7;
-	    break;
-	case '8':
-	    currentValue = 8;
-	    break;
-	case '9':
-	    currentValue = 9;
-	    break;
-	case 'a':
-	    currentValue = 10;
-	    break;
-	case 'b':
-	    currentValue = 11;
-	    break;
-	case 'c':
-	    currentValue = 12;
-	    break;
-	case 'd':
-	    currentValue = 13;
-	    break;
-	case 'e':
-	    currentValue = 14;
-	    break;
-	case 'f':
-	    currentValue = 15;
-	    break;
-	default:
-	    currentValue = 0;
-	    break;
-	}
-	resultingDecimal += (currentValue * addedValue);
+		{
+		uint8 addedValue = pow(16, (size - i - 1));
+		uint8 currentValue = 0;
+		switch (chars[i]) 
+		{
+			case '0':
+				currentValue = 0;
+				break;
+			case '1':
+				currentValue = 1;
+				break;
+			case '2':
+				currentValue = 2;
+				break;
+			case '3':
+				currentValue = 3;
+				break;
+			case '4':
+				currentValue = 4;
+				break;
+			case '5':
+				currentValue = 5;
+				break;
+			case '6':
+				currentValue = 6;
+				break;
+			case '7':
+				currentValue = 7;
+				break;
+			case '8':
+				currentValue = 8;
+				break;
+			case '9':
+				currentValue = 9;
+				break;
+			case 'a':
+				currentValue = 10;
+				break;
+			case 'b':
+				currentValue = 11;
+				break;
+			case 'c':
+				currentValue = 12;
+				break;
+			case 'd':
+				currentValue = 13;
+				break;
+			case 'e':
+				currentValue = 14;
+				break;
+			case 'f':
+				currentValue = 15;
+				break;
+			default:
+				currentValue = 0;
+				break;
+		}
+		resultingDecimal += (currentValue * addedValue);
     }
     return resultingDecimal;
 }
@@ -84,7 +85,7 @@ void getHexPixel(Pixel *pixel)
 	decToHex(pixel->green, &printPixel[2]);
 	decToHex(pixel->blue, &printPixel[4]);
 	decToHex(pixel->alpha, &printPixel[6]);
-	printf("\n%s", printPixel);
+	printf("\n%s\n\n", printPixel);
 }
 
 void decToHex(uint8 dec, char hex[2]) 
