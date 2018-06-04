@@ -16,7 +16,7 @@ uint8 hexToDec(char* chars, int size)
     uint8 resultingDecimal = 0;
     uint8 res = 0;
     for(int i = 0; i < size; i++)
-		{
+	{
 		uint8 addedValue = pow(16, (size - i - 1));
 		uint8 currentValue = 0;
 		switch (chars[i]) 
