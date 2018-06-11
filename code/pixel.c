@@ -4,6 +4,16 @@
 uint8 hexToDec(char* chars, int size);
 void decToHex(uint8 dec, char hex[2]);
 
+Pixel** getPixelArray(long *stride, long *rows) {
+	Pixel **resultArray;
+	resultArray = malloc(*rows * sizeof(Pixel));
+	for (int i = 0; i < *rows; i++)
+	{
+		resultArray[i] = malloc(*stride * (sizeof(resultArray[0])));
+	}
+	return resultArray;
+}
+
 Pixel getPixel(char s[8])
 {
     Pixel pixel = { hexToDec(s, 2), hexToDec(&s[2], 2), hexToDec(&s[4], 2), hexToDec(&s[6], 2)};
@@ -78,14 +88,13 @@ uint8 hexToDec(char* chars, int size)
     return resultingDecimal;
 }
 
-void getHexPixel(Pixel *pixel)
+void getHexPixel(char stringPixel[9], Pixel *pixel)
 {
-	char printPixel[9] = "00000000";
-	decToHex(pixel->red, &printPixel[0]);
-	decToHex(pixel->green, &printPixel[2]);
-	decToHex(pixel->blue, &printPixel[4]);
-	decToHex(pixel->alpha, &printPixel[6]);
-	printf("\n%s\n\n", printPixel);
+	decToHex(pixel->red, &stringPixel[0]);
+	decToHex(pixel->green, &stringPixel[2]);
+	decToHex(pixel->blue, &stringPixel[4]);
+	decToHex(pixel->alpha, &stringPixel[6]);
+	stringPixel[8] = '\0';
 }
 
 void decToHex(uint8 dec, char hex[2]) 
@@ -167,5 +176,8 @@ void decToHex(uint8 dec, char hex[2])
 
 void printPixel(Pixel *pixel)
 {
+	char hexPixel[9];
+	getHexPixel(hexPixel, pixel);
     printf("red: %d   \t;  green: %d \t;  blue: %d \t;  alpha: %d \t;\n", pixel->red, pixel->green, pixel->blue, pixel->alpha);
+	printf("Hex: %s\n\n", hexPixel);
 }

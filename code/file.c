@@ -1,67 +1,91 @@
 #include "file.h"
 
 
-void printFile(char *fileName, char *image)
+// private function calls
+void getPixelsFromFile(FILE *file, Pixel **pixelArray, long *stride, long *rows);
+void getStrideFromLong(char *stringStride, long *longStride);
+long getFileLength(FILE *file);
+
+void printFile(char *fileName, char *text)
 {
 	FILE *file;
 	file = fopen(fileName, "w+");
-	fputs(image, file);
+	fputs(text, file);
 	fclose(file);
 }
 
-Pixel** getPixelArray(char *fileName, long *stride, long *rows)
+Pixel** getPixelArrayFromFile(char *fileName, long *stride, long *rows)
 {
-	FILE *file;
 	uint8 strideLength = 17;
 	char strideBuff[17];
 
+	FILE *file;
 	file = fopen("test.emg", "r");
 	fgets(strideBuff, strideLength, (FILE*)file);
+
 	*stride = atol(strideBuff);
 	*rows = ((getFileLength(file) - 16) / 8) / *stride;
 
 	// allocate right amount of space for the amount of pixels being loaded
-	Pixel **resultArray;
-	resultArray = malloc(*rows * sizeof(Pixel));
-	for (int i = 0; i < *rows; i++)
-	{
-		resultArray[i] = malloc(*stride * (sizeof(resultArray[0])));
-	}
+	Pixel **pixelArray = getPixelArray(stride, rows);
 
 	// fill the resultArray with pixels from the file
-	getPixels(file, resultArray, stride, rows);
+	getPixelsFromFile(file, pixelArray, stride, rows);
 
 	fclose(file);
 
-	return resultArray;
+	return pixelArray;
 }
 
 // TODO: incompatible types - from 'FILE *' to 'char *'
-void getPixels(FILE *file, Pixel **pixelArray, long *stride, long *rows)
+// TODO: use HexRegEx to control input file
+void getPixelsFromFile(FILE *file, Pixel **pixelArray, long *stride, long *rows)
 {
 	for (int i = 0; i < *rows; i++) {
 		for (int j = 0; j < *stride; j++) {
 			char pixelBuff[9];
 			fgets(pixelBuff, 9, (FILE*)file);
 			pixelArray[i][j] = getPixel(pixelBuff);
-			// TODO: remove this print
-			printPixel(&pixelArray[i][j]);
 		}
 	}
 }
 
-void printFileStatistics()
+void writePixelsToFile(char *fileName, Pixel **pixelArray, long *stride, long *rows)
 {
+	char fileStride[17];
+	char filePixel[9];
+
 	FILE *file;
+	file = fopen(fileName, "w+");
+
+	//stride
+	getStrideFromLong(fileStride, stride);
+	fputs(fileStride, file);
+
+	//pixels
+	for (int i = 0; i < (*rows); i++)
+	{
+		for (int j = 0; j < (*stride); j++)
+		{
+			getHexPixel(filePixel, &pixelArray[i][j]);
+			fputs(filePixel, file);
+		}
+	}
+
+	fclose(file);
+}
+
+void printEmgFileStatistics(char *fileName)
+{
 	char strideBuff[17];
 	char pixelBuff[9];
 
-	file = fopen("test.emg", "r");
+	FILE *file;
+	file = fopen(fileName, "r");
 
 	long amountOfPixels = (getFileLength(file) - 16) / 8;
 
 	printf("\n######################################\n# FILE STATS\n######################################\n#\n");
-
 	printf("# Amount of Pixels in file: %d\n", amountOfPixels);
 
 	fgets(strideBuff, 17, (FILE*)file);
@@ -74,6 +98,25 @@ void printFileStatistics()
 
 	printf("#\n######################################\n\n");
 	fclose(file);
+}
+
+void getStrideFromLong(char *stringStride, long *longStride)
+{
+	char buffer[17];
+	uint8 strideLength = 15;
+	ltoa(*longStride, buffer, 10);
+	for (int i = 0; i <= strideLength; i++)
+	{
+		if (buffer[i] > 0)
+		{
+			stringStride[strideLength - i] = buffer[i];
+		}
+		else
+		{
+			stringStride[strideLength - i] = '0';
+		}
+	}
+	stringStride[16] = '\0';
 }
 
 // https://stackoverflow.com/questions/2645598/counting-unknown-numbers-of-chars-from-a-file-in-c

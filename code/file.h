@@ -11,11 +11,9 @@
 #define hexRegEx "^[a-fA-F0-9]+$"
 
 // function declaration
-void printFile(char *fileName, char *image);
-Pixel** getPixelArray(char *fileName, long *stride, long *rows);
-void getPixels(FILE *fileName, Pixel **pixelArray, long *stride, long *rows);
-void printFileStatistics();
-long getFileLength(FILE *file);
+void printFile(char *fileName, char *text);
+Pixel** getPixelArrayFromFile(char *fileName, long *stride, long *rows);
+void writePixelsToFile(char *fileName, Pixel **pixelArray, long *stride, long *rows);
+void printEmgFileStatistics(char *fileName);
 
 #endif
-

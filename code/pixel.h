@@ -17,8 +17,9 @@ typedef struct Pixel
 	uint8 alpha;
 }Pixel;
 
+Pixel** getPixelArray(long *stride, long *rows);
 Pixel getPixel(char s[8]);
-void getHexPixel(Pixel *pixel);
+void getHexPixel(char stringPixel[9], Pixel *pixel);
 void printPixel(Pixel *pixel);
 
 #endif
