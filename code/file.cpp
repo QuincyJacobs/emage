@@ -1,6 +1,5 @@
 #include "file.h"
 
-
 // private function calls
 void getPixelsFromFile(FILE *file, Pixel **pixelArray, long *stride, long *rows);
 void getStrideFromLong(char *stringStride, long *longStride);

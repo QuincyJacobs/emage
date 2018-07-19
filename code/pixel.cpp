@@ -6,10 +6,10 @@ void decToHex(uint8 dec, char hex[2]);
 
 Pixel** getPixelArray(long *stride, long *rows) {
 	Pixel **resultArray;
-	resultArray = malloc(*rows * sizeof(Pixel));
+	resultArray = (Pixel**)malloc(*rows * sizeof(Pixel));
 	for (int i = 0; i < *rows; i++)
 	{
-		resultArray[i] = malloc(*stride * (sizeof(resultArray[0])));
+		resultArray[i] = (Pixel*)malloc(*stride * (sizeof(resultArray[0])));
 	}
 	return resultArray;
 }
