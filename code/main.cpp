@@ -238,9 +238,11 @@ int CALLBACK WinMain(
 {
 	WNDCLASS WindowClass = {};
 
-	char *readTestFileName = "test.emg";
-	char *writeTestFileName = "writeTest.emg";
-	printFile(readTestFileName, "0000000000000005ff0000ff00ff00ff0000ffffffffffffffffffffff0000ff00ff00ff0000ffffffffffffffffffffff0000ff00ff00ff0000ffffffffffffffffffffff0000ff00ff00ff0000ffffffffffffffffffff");
+	char *readTestFileName = (char *)"test.emg";
+	char *writeTestFileName = (char *)"writeTest.emg";
+	char *fileTestString = (char *)"0000000000000005ff0000ff00ff00ff0000ffffffffffffffffffffff0000ff00ff00ff0000ffffffffffffffffffffff0000ff00ff00ff0000ffffffffffffffffffffff0000ff00ff00ff0000ffffffffffffffffffff";
+	printFile(readTestFileName, fileTestString);
+	//printFile(readTestFileName, "0000000000000005ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 
 	long stride = 0;
 	long rows = 0;
@@ -263,7 +265,7 @@ int CALLBACK WinMain(
 			CreateWindowExA(
 				0,
 				WindowClass.lpszClassName,
-				"CGAME",
+				"Renderer",
 				WS_OVERLAPPEDWINDOW | WS_VISIBLE,
 				CW_USEDEFAULT,
 				CW_USEDEFAULT,
